@@ -2,6 +2,7 @@ from kafka import KafkaConsumer, TopicPartition, SimpleConsumer, SimpleClient
 import json
 import argparse
 
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--topic',action='store',dest='kafka_topic')
@@ -21,6 +22,7 @@ consumer.assign([TopicPartition(KAFKA_TOPIC, 0)])
 for message in consumer:
     json_string = message.value.decode('utf8')
     try:
-        print(json.loads(json_string))
+        json_data = json.loads(json_string)
+        print(json_data)
     except:
         pass
