@@ -49,3 +49,41 @@ services:
     restart: always
     ports:
       - 8080:8080
+  
+  # franz-ivan:
+  #   environment: &environment
+  #     CRYPTO_PAIR: btcusd
+  #     KAFKA_HOST: kafka
+  #     KAFKA_PORT: 9092
+  #     KAFKA_TOPIC: btcusd
+  #     KAFKA_HOST: kafka
+  #     KAFKA_PORT: 9092
+  #     DB_HOST: db
+  #     DB_PORT: 5432
+
+  producer:
+    build: ./kafka_producer
+    depends_on:
+      - zookeeper
+      - kafka
+      - db
+    environment:
+      CRYPTO_PAIR: btcusd
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      KAFKA_TOPIC: btcusd
+
+  consumer:
+    build: ./kafka_consumer
+    depends_on:
+      - zookeeper
+      - kafka
+      - db
+    environment:
+      CRYPTO_PAIR: btcusd
+      KAFKA_TOPIC: btcusd
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      DB_HOST: db
+      DB_PORT: 5432
+
