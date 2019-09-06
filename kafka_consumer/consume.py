@@ -64,32 +64,8 @@ for i in range(1,10):
 
 consumer.assign([TopicPartition(KAFKA_TOPIC, 0)])
 
-# set up Postgres connection and prices database
-def init_connect_dbase():
-    try:
-        db_connection = connect(user='postgres',password='example',host=DB_HOST, database=DB_NAME)
-        db_connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    except OperationalError:
-        logger.error("first time record, creating DB...")
-        db_connection = connect(user='postgres',password='example',host=DB_HOST)
-        logger.error("connected to DB server...")
-        db_connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        logger.error("set isolation level")
-        db_cursor = db_connection.cursor()
-        logger.error("create cursor")
-        db_cursor.execute("CREATE DATABASE %s" % DB_NAME)
-        logger.error("create database %s" % DB_NAME)
-        # close cursor and connection and reconnect
-        db_cursor.close()
-        logger.error("close cursor")
-        db_connection.close()
-        logger.error("close connection")
-        logger.error("attempt connection to newly created DB")
-        db_connection = connect(user='postgres',password='example',host=DB_HOST, database=DB_NAME)
-        logger.error("connection successful!")
-    return db_connection
-
-db_connection = init_connect_dbase()
+db_connection = connect(user='postgres',password='example',host=DB_HOST, database=DB_NAME)
+db_connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 logger.error("connection created")
 
 
@@ -97,19 +73,10 @@ logger.error("connection created")
 db_cursor = db_connection.cursor()
 logger.error("cursor set up")
 
-# create table to record the time series
-logger.error("creating the table %s" % KAFKA_TOPIC)
-try:
-    db_cursor.execute('CREATE TABLE %s (timestamp bigint PRIMARY KEY, value float)' % KAFKA_TOPIC)
-except errors.DuplicateTable:
-    logger.error('recording to existing table: %s' % KAFKA_TOPIC)
+db_cursor.execute('CREATE TABLE IF NOT EXISTS %s (timestamp bigint PRIMARY KEY, value float)' % KAFKA_TOPIC)
+db_cursor.execute('CREATE TABLE IF NOT EXISTS cryptowatch_api_allowance (timestamp bigint PRIMARY KEY, allowance bigint)')
 
-# create table to record Cryptowat.ch API call allowance
-logger.error("creating the table cryptowatch_api_allowance")
-try:
-    db_cursor.execute('CREATE TABLE cryptowatch_api_allowance (timestamp bigint PRIMARY KEY, allowance bigint)')
-except errors.DuplicateTable:
-    pass
+time.sleep(10)
 
 for message in consumer:
     logger.error("recording data....")
@@ -126,6 +93,6 @@ for message in consumer:
         # record API call allowance to Postgres
         db_cursor.execute('INSERT INTO %s(timestamp, allowance) VALUES (%s, %s)' % 
             ("cryptowatch_api_allowance", str(message.timestamp), str(json_data['allowance']['remaining'])))
-        logger.error(json_data + '\n')
+        logger.error(str(json_data) + '\n')
     except Exception as e:
         logger.error(e)

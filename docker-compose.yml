@@ -39,10 +39,11 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   db:
-    image: postgres
+    image: postgres:9.3
     restart: always
     environment:
       POSTGRES_PASSWORD: example
+      POSTGRES_DB: crypto_prices
 
   adminer:
     image: adminer
@@ -50,17 +51,6 @@ services:
     ports:
       - 8080:8080
   
-  # franz-ivan:
-  #   environment: &environment
-  #     CRYPTO_PAIR: btcusd
-  #     KAFKA_HOST: kafka
-  #     KAFKA_PORT: 9092
-  #     KAFKA_TOPIC: btcusd
-  #     KAFKA_HOST: kafka
-  #     KAFKA_PORT: 9092
-  #     DB_HOST: db
-  #     DB_PORT: 5432
-
   producer:
     build: ./kafka_producer
     depends_on:
@@ -86,4 +76,12 @@ services:
       KAFKA_PORT: 9092
       DB_HOST: db
       DB_PORT: 5432
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      GF_SERVER_ROOT_URL: http://grafana.server.name
+      GF_SECURITY_ADMIN_PASSWORD: secret
 
