@@ -39,7 +39,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   db:
-    image: postgres:9.3
+    image: postgres:10
     restart: always
     environment:
       POSTGRES_PASSWORD: example
