@@ -8,6 +8,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY consume.py /app/
+COPY ./access/* /app/access/
 WORKDIR /app
 
 CMD ["python3", "consume.py", "--envvars"]

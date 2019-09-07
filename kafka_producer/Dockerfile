@@ -8,6 +8,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY produce.py /app/
+COPY ./access/* /app/access/
 WORKDIR /app
 
 CMD ["python3", "produce.py", "--envvars"]
