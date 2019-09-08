@@ -71,9 +71,9 @@ spec:
         - name: DB_NAME
           value: "crypto_prices"
         - name: DB_USER
-          value: "avnadmin"
+          value: <<db-user-here>>
         - name: DB_PASS
-          value: "f27q99yemgrwwe4x"
+          value: <<db-pass-here>>
         volumeMounts: 
           - mountPath: "/app/access/"
             name: kafka-secret
