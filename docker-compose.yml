@@ -27,7 +27,7 @@ services:
       KAFKA_SSL_CAFILE: '/app/access/ca.pem'
       KAFKA_SSL_CERTFILE: '/app/access/service.cert'
       KAFKA_SSL_KEYFILE: '/app/access/service.key'
-      LOGGING_LEVEL: DEBUG
+      LOGGING_LEVEL: "DEBUG"
 
   consumer:
     build: ./kafka_consumer
@@ -45,7 +45,7 @@ services:
       DB_NAME: crypto_prices
       DB_USER: 'franz-ivan'
       DB_PASS: 'loudocu6yn24sk0l'
-      LOGGING_LEVEL: DEBUG
+      LOGGING_LEVEL: "DEBUG"
 
   # consumer_local_db:
   #   build: ./kafka_consumer

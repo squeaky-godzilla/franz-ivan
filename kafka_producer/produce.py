@@ -19,15 +19,6 @@ For valid crypto pairs visit: https://api.cryptowat.ch/pairs
 
 '''
 
-# logging setup
-
-formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
-
-logger = logging.getLogger()
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.ERROR)
 
 parser = argparse.ArgumentParser(description=MSG)
 
@@ -47,6 +38,7 @@ if args.envvars:
     KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
     KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
     KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
+    LOGGING_LEVEL = environ['LOGGING_LEVEL']
 
 else:
 
@@ -55,6 +47,16 @@ else:
     KAFKA_PORT = str(args.kafka_port)
     CRYPTO_PAIR = args.crypto_pair
 
+# logging setup
+
+formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
+
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logging_level = logging.getLevelName(LOGGING_LEVEL)
+logger.setLevel(logging_level)
 
 # Wait for Kafka broker to become available
 for i in range(1,10):

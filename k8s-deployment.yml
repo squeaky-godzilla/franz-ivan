@@ -37,6 +37,8 @@ spec:
           value: "/app/access/service.cert"
         - name: KAFKA_SSL_KEYFILE
           value: "/app/access/service.key"
+        - name: LOGGING_LEVEL
+          value: "DEBUG"
         volumeMounts: 
           - mountPath: "/app/access"
             name: kafka-secret
@@ -74,6 +76,8 @@ spec:
           value: <<db-user-here>>
         - name: DB_PASS
           value: <<db-pass-here>>
+        - name: LOGGING_LEVEL
+          value: "DEBUG"
         volumeMounts: 
           - mountPath: "/app/access/"
             name: kafka-secret
