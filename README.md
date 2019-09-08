@@ -20,10 +20,33 @@ Both the price and the allowance metric can be displayed via Grafana instance.
 
 ### Docker Compose
 
+_prereqs: Docker, Docker Compose_
+
 clone the repo:
 
 `$ git clone git@github.com:squeaky-godzilla/franz-ivan.git`
-`$ cd franz-ivan`
+
+inside the repo directory, copy your `ca.pem`, `service.cert` and `service.key` into the `./tmp/access/` directory.
+
+build and deploy the app:
+
+`$ docker-compose up --build`
+
+### Kubernetes
+
+_prereqs: installed and configured kubectl_
+
+add your `ca.pem`, `service.cert`, `service.key` strings into the prepared secrets template `ssl.yml`.
+
+create the secrets resource in Kubernetes:
+
+`$ kubectl create -f ssl.yml`
+
+create the deployment:
+
+`$ kubectl create -f k8s-deployment.yml` 
+
+
 
 
 
