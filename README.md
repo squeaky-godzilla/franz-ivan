@@ -36,7 +36,7 @@ build and deploy the app:
 
 _prereqs: installed and configured kubectl_
 
-add your `ca.pem`, `service.cert`, `service.key` strings into the prepared secrets template `ssl.yml`.
+add your base64 encoded `ca.pem`, `service.cert`, `service.key` strings into the prepared secrets template `ssl.yml`.
 
 create the secrets resource in Kubernetes:
 
