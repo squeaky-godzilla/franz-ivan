@@ -15,15 +15,6 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from psycopg2 import OperationalError
 from psycopg2 import errors
 
-# logging setup
-
-formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
-
-logger = logging.getLogger()
-handler = logging.StreamHandler()   # by default writes to STDERR when stream is None
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
 
 
 parser = argparse.ArgumentParser()
@@ -50,6 +41,7 @@ if args.envvars:
     DB_NAME = environ['DB_NAME']
     DB_USER = environ['DB_USER']
     DB_PASS = environ['DB_PASS']
+    LOGGING_LEVEL = environ['LOGGING_LEVEL']
     
 else:
 
@@ -58,6 +50,16 @@ else:
     KAFKA_PORT = str(args.kafka_port)
     CRYPTO_PAIR = args.crypto_pair
 
+# logging setup
+
+formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
+
+logger = logging.getLogger()
+handler = logging.StreamHandler()   # by default writes to STDERR when stream is None
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logging_level = logging.getLevelName(LOGGING_LEVEL)
+logger.setLevel(logging_level)
 
 # Wait for Kafka broker to become available
 for i in range(1,10):
