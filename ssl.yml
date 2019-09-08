@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-secret
+type: Opaque
+data:
+  ca.pem: base64-encoded-string-here
+
+  service.cert: base64-encoded-string-here
+
+  service.key: base64-encoded-string-here

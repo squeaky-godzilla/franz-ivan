@@ -1,7 +1,5 @@
 FROM frolvlad/alpine-python3
 
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
-
 COPY requirements.txt /
 
 RUN pip install --upgrade pip && \

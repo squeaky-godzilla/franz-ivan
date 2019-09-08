@@ -1,2 +1,4 @@
 .vscode/
 backend_kafka_consumer_to_postgres.txt
+tmp/
+my-*

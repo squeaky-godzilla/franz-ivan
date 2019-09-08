@@ -19,15 +19,6 @@ For valid crypto pairs visit: https://api.cryptowat.ch/pairs
 
 '''
 
-# logging setup
-
-formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
-
-logger = logging.getLogger()
-handler = logging.StreamHandler()   # by default writes to STDERR when stream is None
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.ERROR)
 
 parser = argparse.ArgumentParser(description=MSG)
 
@@ -40,11 +31,15 @@ parser.add_argument('--envvars', action='store_true')
 args = parser.parse_args()
 
 if args.envvars:
+
     KAFKA_TOPIC = environ['KAFKA_TOPIC']
-    KAFKA_HOST = environ['KAFKA_HOST']
-    KAFKA_PORT = environ['KAFKA_PORT']
     CRYPTO_PAIR = environ['CRYPTO_PAIR']
-    
+    KAFKA_HOST_PORT = environ['KAFKA_HOST_PORT']
+    KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
+    KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
+    KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
+    LOGGING_LEVEL = environ['LOGGING_LEVEL']
+
 else:
 
     KAFKA_TOPIC = args.crypto_pair
@@ -52,19 +47,38 @@ else:
     KAFKA_PORT = str(args.kafka_port)
     CRYPTO_PAIR = args.crypto_pair
 
+# logging setup
+
+formatter = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
+
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logging_level = logging.getLevelName(LOGGING_LEVEL)
+logger.setLevel(logging_level)
 
 # Wait for Kafka broker to become available
 for i in range(1,10):
     try:
         logger.error('connecting to Kafka broker... \n')
-        producer = KafkaProducer(value_serializer=lambda v:json.dumps(v).encode('utf-8'), 
-                            bootstrap_servers=":".join([KAFKA_HOST, KAFKA_PORT]))
+        producer = \
+                KafkaProducer(  
+                                value_serializer=lambda v:json.dumps(v).encode('utf-8'), 
+                                bootstrap_servers=KAFKA_HOST_PORT,
+                                security_protocol="SSL",
+                                ssl_cafile=KAFKA_SSL_CAFILE,
+                                ssl_certfile=KAFKA_SSL_CERTFILE,
+                                ssl_keyfile=KAFKA_SSL_KEYFILE,
+                            )
     except kafka_errors.NoBrokersAvailable:
         logger.error('No Kafka broker available, retrying in 10s... \n')
         time.sleep(10)
 
 while True:
+    data = {}
     response = requests.get('https://api.cryptowat.ch/markets/coinbase-pro/%s/price' % CRYPTO_PAIR.lower())
-    data = response.json()
+    
+    data[CRYPTO_PAIR] = response.json()
     producer.send(KAFKA_TOPIC, data)
     time.sleep(10)
