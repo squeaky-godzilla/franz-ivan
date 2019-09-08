@@ -1,3 +1,5 @@
+![alt text](http://lyricstranslate.com/files/ivan%20rebroff.jpg)
+
 # Franz Ivan
 
 Implementing a system that collects prices of traded cryptocurrency pairs from Cryptowat.ch API and
