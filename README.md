@@ -60,10 +60,10 @@ create the deployment:
 
 ### Grafana
 
-![Grafana Screenshot](https://imgur.com/a/NWBgfgc)
 
 in addition to the above, you can set up Grafana instance to monitor the metrics, you can use the dashboard template in the `./grafana/` folder in the repo.
 
+![Grafana Screenshot](grafana/grafana-screenshot.png)
 
 ## How does it work?
 
