@@ -16,7 +16,6 @@ __maintainer__ = "Vitek Urbanec"
 
 import time
 import json
-import argparse
 from os import environ
 import sys
 import logging
@@ -84,7 +83,7 @@ if __name__ == "__main__":
             producer = \
                     KafkaProducer(
                         value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                        bootstrap_servers=':'.join([KAFKA_HOST,KAFKA_PORT]),
+                        bootstrap_servers=':'.join([KAFKA_HOST, KAFKA_PORT]),
                         security_protocol="SSL",
                         ssl_cafile=KAFKA_SSL_CAFILE,
                         ssl_certfile=KAFKA_SSL_CERTFILE,

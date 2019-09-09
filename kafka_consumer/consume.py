@@ -12,7 +12,6 @@ __license__ = "MIT"
 __maintainer__ = "Vitek Urbanec"
 
 import json
-import argparse
 from os import environ
 import time
 import sys
@@ -74,7 +73,7 @@ if __name__ == "__main__":
             consumer = \
                 KafkaConsumer(
                     auto_offset_reset='latest',
-                    bootstrap_servers=':'.join([KAFKA_HOST,KAFKA_PORT]),
+                    bootstrap_servers=':'.join([KAFKA_HOST, KAFKA_PORT]),
                     security_protocol="SSL",
                     ssl_cafile=KAFKA_SSL_CAFILE,
                     ssl_certfile=KAFKA_SSL_CERTFILE,
