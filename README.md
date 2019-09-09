@@ -34,6 +34,7 @@ build and deploy the app:
 
 `$ docker-compose up --build`
 
+
 ### Kubernetes
 
 _prereqs: installed and configured kubectl_
@@ -47,8 +48,6 @@ create the secrets resource in Kubernetes:
 create the deployment:
 
 `$ kubectl create -f k8s-deployment.yml` 
-
-
 
 
 
