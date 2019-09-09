@@ -12,32 +12,22 @@ __license__ = "MIT"
 __maintainer__ = "Vitek Urbanec"
 
 import json
-import argparse
 from os import environ
 import time
 import sys
 import logging
 from kafka import KafkaConsumer, TopicPartition
-# from kafka import errors as kafka_errors
 
 # Postgres imports
 
 from psycopg2 import connect
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
+from dotenv import load_dotenv
 
+# loading env file
 
-PARSER = argparse.ArgumentParser()
-
-PARSER.add_argument('--topic', action='store', dest='kafka_topic')
-PARSER.add_argument('--host', action='store', dest='kafka_host')
-PARSER.add_argument('--port', action='store', dest='kafka_port')
-
-
-PARSER.add_argument('--db-host', action='store', dest='db_host')
-PARSER.add_argument('--envvars', action='store_true')
-
-ARGS = PARSER.parse_args()
+load_dotenv(verbose=True)
 
 # logging setup
 
@@ -49,31 +39,24 @@ HANDLER.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER)
 
 
-if ARGS.envvars:
-    try:
-        DB_HOST = environ['DB_HOST']
-        DB_PORT = environ['DB_PORT']
-        KAFKA_TOPIC = environ['KAFKA_TOPIC']
-        CRYPTO_PAIR = environ['CRYPTO_PAIR']
-        KAFKA_HOST_PORT = environ['KAFKA_HOST_PORT']
-        KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
-        KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
-        KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
-        DB_NAME = environ['DB_NAME']
-        DB_USER = environ['DB_USER']
-        DB_PASS = environ['DB_PASS']
-        LOGGING_LEVEL = environ['LOGGING_LEVEL']
-    except KeyError:
-        LOGGER.setLevel(logging.ERROR)
-        LOGGER.error("Incomplete environment variables")
-        sys.exit(1)
-
-else:
-
-    KAFKA_TOPIC = ARGS.crypto_pair
-    KAFKA_HOST = ARGS.kafka_host
-    KAFKA_PORT = str(ARGS.kafka_port)
-    CRYPTO_PAIR = ARGS.crypto_pair
+try:
+    DB_HOST = environ['DB_HOST']
+    DB_PORT = environ['DB_PORT']
+    KAFKA_TOPIC = environ['KAFKA_TOPIC']
+    CRYPTO_PAIR = environ['CRYPTO_PAIR']
+    KAFKA_HOST = environ['KAFKA_HOST']
+    KAFKA_PORT = environ['KAFKA_PORT']
+    KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
+    KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
+    KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
+    DB_NAME = environ['DB_NAME']
+    DB_USER = environ['DB_USER']
+    DB_PASS = environ['DB_PASS']
+    LOGGING_LEVEL = environ['LOGGING_LEVEL']
+except KeyError:
+    LOGGER.setLevel(logging.ERROR)
+    LOGGER.error("Incomplete environment variables")
+    sys.exit(1)
 
 LOGGING_LEVEL_SETTING = logging.getLevelName(LOGGING_LEVEL)
 LOGGER.setLevel(LOGGING_LEVEL_SETTING)
@@ -90,7 +73,7 @@ if __name__ == "__main__":
             consumer = \
                 KafkaConsumer(
                     auto_offset_reset='latest',
-                    bootstrap_servers=KAFKA_HOST_PORT,
+                    bootstrap_servers=':'.join([KAFKA_HOST, KAFKA_PORT]),
                     security_protocol="SSL",
                     ssl_cafile=KAFKA_SSL_CAFILE,
                     ssl_certfile=KAFKA_SSL_CERTFILE,

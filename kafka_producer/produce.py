@@ -16,7 +16,6 @@ __maintainer__ = "Vitek Urbanec"
 
 import time
 import json
-import argparse
 from os import environ
 import sys
 import logging
@@ -24,33 +23,13 @@ import requests
 from kafka import KafkaProducer
 from kafka import errors as kafka_errors
 
-MSG = '''
-Kafka Producer for Franz-Ivan Project
+from dotenv import load_dotenv
 
-Produce cryptocurrency prices messages for a Kafka topic. Data is relevant
-for Coinbase-Pro and streamed from Cryptowatch API
+# loading env file
 
-Kafka topic is named same as the streamed crypto pair.
-
-For valid crypto pairs visit: https://api.cryptowat.ch/pairs
-
-'''
-
-
-
-
-PARSER = argparse.ArgumentParser(description=MSG)
-
-# parser.add_argument('--topic',action='store',dest='kafka_topic')
-PARSER.add_argument('--host', action='store', dest='kafka_host')
-PARSER.add_argument('--port', action='store', dest='kafka_port')
-PARSER.add_argument('--crypto-pair', action='store', dest='crypto_pair', default="btcusd")
-PARSER.add_argument('--envvars', action='store_true')
-
-ARGS = PARSER.parse_args()
+load_dotenv(verbose=True)
 
 # logging setup
-
 
 FORMATTER = logging.Formatter('%(asctime)-15s %(name)-12s: %(levelname)-8s %(message)s')
 
@@ -60,27 +39,19 @@ HANDLER.setFormatter(FORMATTER)
 LOGGER.addHandler(HANDLER)
 
 
-if ARGS.envvars:
-
-    try:
-        KAFKA_TOPIC = environ['KAFKA_TOPIC']
-        CRYPTO_PAIR = environ['CRYPTO_PAIR']
-        KAFKA_HOST_PORT = environ['KAFKA_HOST_PORT']
-        KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
-        KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
-        KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
-        LOGGING_LEVEL = environ['LOGGING_LEVEL']
-    except KeyError:
-        LOGGER.setLevel(logging.ERROR)
-        LOGGER.error("Incomplete environment variables")
-        sys.exit(1)
-
-else:
-
-    KAFKA_TOPIC = ARGS.crypto_pair
-    KAFKA_HOST = ARGS.kafka_host
-    KAFKA_PORT = str(ARGS.kafka_port)
-    CRYPTO_PAIR = ARGS.crypto_pair
+try:
+    KAFKA_TOPIC = environ['KAFKA_TOPIC']
+    CRYPTO_PAIR = environ['CRYPTO_PAIR']
+    KAFKA_HOST = environ['KAFKA_HOST']
+    KAFKA_PORT = environ['KAFKA_PORT']
+    KAFKA_SSL_CAFILE = environ['KAFKA_SSL_CAFILE']
+    KAFKA_SSL_CERTFILE = environ['KAFKA_SSL_CERTFILE']
+    KAFKA_SSL_KEYFILE = environ['KAFKA_SSL_KEYFILE']
+    LOGGING_LEVEL = environ['LOGGING_LEVEL']
+except KeyError:
+    LOGGER.setLevel(logging.ERROR)
+    LOGGER.error("Incomplete environment variables")
+    sys.exit(1)
 
 
 LOGGING_LEVEL_SETTING = logging.getLevelName(LOGGING_LEVEL)
@@ -112,7 +83,7 @@ if __name__ == "__main__":
             producer = \
                     KafkaProducer(
                         value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                        bootstrap_servers=KAFKA_HOST_PORT,
+                        bootstrap_servers=':'.join([KAFKA_HOST, KAFKA_PORT]),
                         security_protocol="SSL",
                         ssl_cafile=KAFKA_SSL_CAFILE,
                         ssl_certfile=KAFKA_SSL_CERTFILE,

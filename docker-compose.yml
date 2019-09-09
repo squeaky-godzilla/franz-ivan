@@ -6,29 +6,10 @@ services:
     build: ./kafka_producer
     volumes:
       - ./tmp/access/:/app/access/
-    environment:
-      CRYPTO_PAIR: btcusd
-      KAFKA_TOPIC: crypto_prices
-      KAFKA_HOST_PORT: 'kafka-franz-ivan-vit-de84.aivencloud.com:10235'
-      KAFKA_SSL_CAFILE: '/app/access/ca.pem'
-      KAFKA_SSL_CERTFILE: '/app/access/service.cert'
-      KAFKA_SSL_KEYFILE: '/app/access/service.key'
-      LOGGING_LEVEL: "DEBUG"
+      - ./env/my-franz-ivan.env:/app/.env
 
   consumer:
     build: ./kafka_consumer
     volumes:
       - ./tmp/access/:/app/access/
-    environment:
-      CRYPTO_PAIR: btcusd
-      KAFKA_TOPIC: crypto_prices
-      KAFKA_HOST_PORT: 'kafka-franz-ivan-vit-de84.aivencloud.com:10235'
-      KAFKA_SSL_CAFILE: '/app/access/ca.pem'
-      KAFKA_SSL_CERTFILE: '/app/access/service.cert'
-      KAFKA_SSL_KEYFILE: '/app/access/service.key'
-      DB_HOST: 'postgres-franz-ivan-vit-de84.aivencloud.com'
-      DB_PORT: 10233
-      DB_NAME: crypto_prices
-      DB_USER: <<db-user-here>>
-      DB_PASS: <<db-pass-here>>
-      LOGGING_LEVEL: "DEBUG"
+      - ./env/my-franz-ivan.env:/app/.env
