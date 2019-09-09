@@ -20,7 +20,7 @@ Both the price and the allowance metric can be displayed via Grafana instance.
 
 ## How to deploy?
 
-Go to `https://aiven.io`, register and create your Kafka and PostgreSQL service.
+Go to https://aiven.io, register and create your Kafka and PostgreSQL service.
 
 ### Docker Compose
 
