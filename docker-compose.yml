@@ -2,20 +2,6 @@
 version: '3'
 services:
 
-
-  # db:
-  #   image: postgres:10
-  #   restart: always
-  #   environment:
-  #     POSTGRES_PASSWORD: example
-  #     POSTGRES_DB: crypto_prices
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   producer:
     build: ./kafka_producer
     volumes:
@@ -43,29 +29,6 @@ services:
       DB_HOST: 'postgres-franz-ivan-vit-de84.aivencloud.com'
       DB_PORT: 10233
       DB_NAME: crypto_prices
-      DB_USER: 'franz-ivan'
-      DB_PASS: 'loudocu6yn24sk0l'
+      DB_USER: <<db-user-here>>
+      DB_PASS: <<db-pass-here>>
       LOGGING_LEVEL: "DEBUG"
-
-  # consumer_local_db:
-  #   build: ./kafka_consumer
-  #   environment:
-  #     CRYPTO_PAIR: btcusd
-  #     KAFKA_TOPIC: crypto_prices
-  #     KAFKA_HOST_PORT: 'kafka-franz-ivan-vit-de84.aivencloud.com:10235'
-  #     KAFKA_SSL_CAFILE: './access/ca.pem'
-  #     KAFKA_SSL_CERTFILE: './access/service.cert'
-  #     KAFKA_SSL_KEYFILE: './access/service.key'
-  #     DB_HOST: db
-  #     DB_PORT: 5432
-  #     DB_NAME: crypto_prices
-  #     DB_USER: postgres
-  #     DB_PASS: example
-  
-  grafana:
-    image: grafana/grafana
-    ports:
-      - 3000:3000
-    environment:
-      GF_SERVER_ROOT_URL: http://grafana.server.name
-      GF_SECURITY_ADMIN_PASSWORD: secret
