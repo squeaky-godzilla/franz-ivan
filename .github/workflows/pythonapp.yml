@@ -20,10 +20,10 @@ jobs:
         pip install pylint-fail-under
     - name: Lint producer.py with Pylint
       run: |
-        pylint-fail-under --fail_under 9.0 ./kafka_producer/produce.py
+        pylint-fail-under --fail_under 8.0 ./kafka_producer/produce.py
     - name: Lint consumer.py with Pylint
       run: |
-        pylint-fail-under --fail_under 9.0 ./kafka_consumer/consume.py
+        pylint-fail-under --fail_under 8.0 ./kafka_consumer/consume.py
 #     - name: Test with pytest
 #       run: |
 #         pip install pytest
