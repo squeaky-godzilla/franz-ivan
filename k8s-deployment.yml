@@ -29,8 +29,10 @@ spec:
           value: "btcusd"
         - name: KAFKA_TOPIC
           value: "crypto_prices"
+        - name: KAFKA_HOST
+          value: <<kafka-host-here>>
         - name: KAFKA_HOST_PORT
-          value: "kafka-franz-ivan-vit-de84.aivencloud.com:10235"
+          value: "10235"
         - name: KAFKA_SSL_CAFILE
           value: "/app/access/ca.pem"
         - name: KAFKA_SSL_CERTFILE
@@ -58,8 +60,10 @@ spec:
           value: "btcusd"
         - name: KAFKA_TOPIC
           value: "crypto_prices"
+        - name: KAFKA_HOST
+          value: <<kafka-host-here>>
         - name: KAFKA_HOST_PORT
-          value: "kafka-franz-ivan-vit-de84.aivencloud.com:10235"
+          value: "10235"
         - name: KAFKA_SSL_CAFILE
           value: "/app/access/ca.pem"
         - name: KAFKA_SSL_CERTFILE
@@ -67,7 +71,7 @@ spec:
         - name: KAFKA_SSL_KEYFILE
           value: "/app/access/service.key"
         - name: DB_HOST
-          value: "postgres-franz-ivan-vit-de84.aivencloud.com"
+          value: <<db-host-here>>
         - name: DB_PORT
           value: "10233"
         - name: DB_NAME
