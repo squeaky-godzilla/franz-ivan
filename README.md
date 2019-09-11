@@ -47,7 +47,7 @@ add your base64 encoded `ca.pem`, `service.cert`, `service.key` strings into the
 
 update the `ssl.yml` with your credentials encoded in base64.
 
-update the `k8s-deployment.yml` with the details of your deployment. you can choose to use my containers, or build your own.
+update the `k8s-deployment.yml` with the details of your deployment. you can choose to use my container images, or build your own.
 
 create the secrets resource in Kubernetes:
 
