@@ -31,7 +31,7 @@ spec:
           value: "crypto_prices"
         - name: KAFKA_HOST
           value: <<kafka-host-here>>
-        - name: KAFKA_HOST_PORT
+        - name: KAFKA_PORT
           value: "10235"
         - name: KAFKA_SSL_CAFILE
           value: "/app/access/ca.pem"
@@ -62,7 +62,7 @@ spec:
           value: "crypto_prices"
         - name: KAFKA_HOST
           value: <<kafka-host-here>>
-        - name: KAFKA_HOST_PORT
+        - name: KAFKA_PORT
           value: "10235"
         - name: KAFKA_SSL_CAFILE
           value: "/app/access/ca.pem"
