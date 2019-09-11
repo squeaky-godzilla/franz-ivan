@@ -24,7 +24,8 @@ jobs:
     - name: Lint consumer.py with Pylint
       run: |
         pylint-fail-under --fail_under 8.0 ./kafka_consumer/consume.py
-#     - name: Test with pytest
-#       run: |
-#         pip install pytest
-#         pytest
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        cd test/
+        pytest -vvv
